@@ -1,6 +1,5 @@
 
-import sys
-import os
+
 import re
 import pdfplumber
 from collections import Counter
