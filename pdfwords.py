@@ -4,6 +4,7 @@ import re
 import pdfplumber
 from collections import Counter
 import string
+from PyPDF2 import PdfFileReader
 
 def deleting_common_words(words_sorted):
     
@@ -35,11 +36,19 @@ def top_20_words(words_sorted):
 print("Path for the pdf file: ")
 path = str(input())
 
+
 with pdfplumber.open(path) as pdf:
 
+    pdf_reader = PdfFileReader(path,,strict=False)
+    pages = pdf_reader.numPages
+    
     first_page = pdf.pages[0]
-   
     text =  first_page.extract_text()
+
+    for i in range(1,pages):
+        first_page = pdf.pages[i]
+        text =  first_page.extract_text() + text
+       
     text = text.lower()
     
     word_freq = Counter(text.split())
@@ -47,7 +56,7 @@ with pdfplumber.open(path) as pdf:
     words_sorted = sorted(word_freq.items(), key=lambda x: x[1],reverse=True)
         
     length = len(words_sorted)
-    word_to_del = ['a ' , 'of' , 'to' ,'at','from','the','in','and','on',"a",'A']
+    word_to_del = ['a','i','this' , 'of' , 'to' ,'at','from','the','in','and','on',"a",'A']
      
     
     print('\n\n')
